@@ -76,11 +76,33 @@ public class TCPClient {
                     throw new RuntimeException("Error Inesperado: modo inválido.");
             }
 
-            String number = JOptionPane.showInputDialog("Ingrese el número " + originalBase + " que va a convertir a "
+            String number = "";
+            boolean flag_number = true;
+            while(flag_number) {
+
+                number = JOptionPane.showInputDialog("Ingrese el número " + originalBase + " que va a convertir a "
                     + finalBase + ".").toUpperCase();;
+                if(isNumberValid(number, originalBase)) {
+                    flag_number = false;
+                } else {
+                    JOptionPane.showMessageDialog( null,"Ingrese correctamente el numero " +
+                            originalBase +".\nCaracteres permitidos: binario[0-1], decimal[0-9], hexadecimal[0-9, A-F].",
+                            "Error: numero inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
-            String size = JOptionPane.showInputDialog("Ingrese el tamaño del número que quiere como respuesta.");
-
+            String size = "";
+            boolean flag_size = true;
+            while(flag_size) {
+                size = JOptionPane.showInputDialog("Ingrese el tamaño del número que quiere como respuesta. Mínimo 1, máximo 16.");
+                if(isSizeValid(size)) {
+                    flag_size = false;
+                } else {
+                    JOptionPane.showMessageDialog( null,"Ingrese correctamente el tamaño " +
+                            "del numero de respuesta.\nDebe ser un numero entero en el rango.",
+                            "Error: tamaño inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            }
             String parameters = mode + "%" + number + "%" + size + "%";
 
             toNetwork.println(parameters); //-> Desbloquea el servidor
@@ -100,5 +122,39 @@ public class TCPClient {
         }
 
         return modeValid;
+    }
+
+    private static boolean isNumberValid(String numberStr, String base) {
+
+        boolean numValid = false;
+
+        switch (base) {
+            case "binario":
+                numValid = numberStr.matches("[0-1]+");
+                break;
+            case "decimal":
+                numValid = numberStr.matches("[0-9]+");
+                break;
+            case "hexadecimal":
+                numValid = numberStr.matches("[0-9A-F]+");
+                break;
+            default:
+                log.warning("La base original no coincide con alguna opción.");
+                break;
+        }
+
+        return numValid;
+    }
+
+    private static boolean isSizeValid(String sizeStr) {
+        boolean sizeValid = false;
+        try {
+            int size = Integer.parseInt(sizeStr);
+            sizeValid = size <= 16 &&  size > 0;
+        } catch (NumberFormatException e) {
+            log.warning("El tamaño fue ingresado incorrectamente.");
+        }
+
+        return sizeValid;
     }
 }

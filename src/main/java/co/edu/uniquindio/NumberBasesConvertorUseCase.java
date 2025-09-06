@@ -2,9 +2,9 @@ package co.edu.uniquindio;
 
 public interface NumberBasesConvertorUseCase {
 
-    String decimalToBinary(int decimal, int size);
+    String decimalToBinary(String decimal, int size);
 
-    String decimalToHexadecimal(int decimal, int size);
+    String decimalToHexadecimal(String decimal, int size);
 
     String binaryToDecimal(String binary, int size);
 
