@@ -53,7 +53,7 @@ public class NumberBasesConvertorService implements NumberBasesConvertorUseCase{
     }
 
     @Override
-    public String binaryToDecimal(String binary, int size) {
+    public String binaryToDecimal(String binary) {
         String decimal = "";
         decimal += Integer.parseInt(binary, 2);
         return decimal;
@@ -74,14 +74,14 @@ public class NumberBasesConvertorService implements NumberBasesConvertorUseCase{
     }
 
     @Override
-    public String hexadecimalToDecimal(String hexadecimal, int size) {
+    public String hexadecimalToDecimal(String hexadecimal) {
         String decimal = "";
         decimal += Integer.parseInt(hexadecimal, 16);
         return decimal;
     }
 
     @Override
-    public String hexadecimalToBinary(String hexadecimal, int size) {
+    public String hexadecimalToBinary(String hexadecimal) {
         String binario = "";
         int auxDecimal = Integer.parseInt(hexadecimal, 16);
         binario += Integer.toBinaryString(auxDecimal);

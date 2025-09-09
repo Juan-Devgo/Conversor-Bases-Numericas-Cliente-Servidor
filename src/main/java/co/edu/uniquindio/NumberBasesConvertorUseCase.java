@@ -6,11 +6,11 @@ public interface NumberBasesConvertorUseCase {
 
     String decimalToHexadecimal(String decimal, int size);
 
-    String binaryToDecimal(String binary, int size);
+    String binaryToDecimal(String binary);
 
     String binaryToHexadecimal(String binary, int size);
 
-    String hexadecimalToDecimal(String hex, int size);
+    String hexadecimalToDecimal(String hex);
 
-    String hexadecimalToBinary(String hex, int size);
+    String hexadecimalToBinary(String hex);
 }

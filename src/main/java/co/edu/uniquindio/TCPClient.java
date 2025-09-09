@@ -3,12 +3,12 @@ package co.edu.uniquindio;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 @Log
 public class TCPClient {
@@ -24,7 +24,7 @@ public class TCPClient {
             );
 
             PrintWriter toNetwork = new PrintWriter(
-                    clientSideSocket.getOutputStream(), true //->Autoflush: Vacear el buffer cuando se envíe el mensaje
+                    clientSideSocket.getOutputStream(), true //-> Autoflush: Vaciar el buffer cuando se envíe el mensaje
             );
 
             JOptionPane.showMessageDialog(null, "La aplicación convertirá números enteros " +
@@ -91,24 +91,40 @@ public class TCPClient {
                 }
             }
 
-            String size = "";
-            boolean flag_size = true;
-            while(flag_size) {
-                size = JOptionPane.showInputDialog("Ingrese el tamaño del número que quiere como respuesta. Mínimo 1, máximo 16.");
-                if(isSizeValid(size)) {
-                    flag_size = false;
-                } else {
-                    JOptionPane.showMessageDialog( null,"Ingrese correctamente el tamaño " +
-                            "del numero de respuesta.\nDebe ser un numero entero en el rango.",
-                            "Error: tamaño inválido", JOptionPane.ERROR_MESSAGE);
+            String size = "0";
+
+            if(mode.equals("1") || mode.equals("2") || mode.equals("4") ) {
+
+                boolean flag_size = true;
+                while (flag_size) {
+                    size = JOptionPane.showInputDialog("Ingrese el tamaño del número que quiere como respuesta. Mínimo 1, máximo 16.");
+                    if (isSizeValid(size)) {
+                        flag_size = false;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ingrese correctamente el tamaño " +
+                                        "del numero de respuesta.\nDebe ser un numero entero en el rango.",
+                                "Error: tamaño inválido", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
-            String parameters = mode + "%" + number + "%" + size + "%";
+
+            String parameters = mode + ";" + number + ";" + size + "\n";
+
+            log.info("Mensaje enviado: " + parameters);
 
             toNetwork.println(parameters); //-> Desbloquea el servidor
 
             String message = fromNetwork.readLine();
-            System.out.println(message);
+
+            log.info("Respuesta recibida: " + message);
+
+            JOptionPane.showMessageDialog(null, "El número convertido es: " +
+                    Arrays.toString(message.split("\n")));
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "El servidor no está activo. Por favor, " +
+                    "inícielo y vuelva a ejecutar el cliente.", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+            log.severe(e.getMessage());
         }
     }
 
